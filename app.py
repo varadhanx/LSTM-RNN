@@ -1,8 +1,8 @@
 import streamlit as st
 import numpy as np
 import pickle
-from keras.models import load_model
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # Load the trained LSTM model
 @st.cache_resource
@@ -28,12 +28,16 @@ def predict_next_word(model, tokenizer, text, max_sequence_len):
             return word
     return None
 
-# Streamlit App UI
+# Streamlit UI
 st.title("🔮 Next Word Prediction with LSTM")
 
 input_text = st.text_input("Enter a sequence of words", "To be or not to")
 
 if st.button("Predict Next Word"):
     max_sequence_len = model.input_shape[1] + 1
-    next_word = predict_next_word(model, tokenizer, input_text
+    next_word = predict_next_word(model, tokenizer, input_text, max_sequence_len)
+    if next_word:
+        st.success(f"**The next word is:** {next_word}")
+    else:
+        st.error("Couldn't predict the next word. Try another input!")
 
